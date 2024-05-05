@@ -9,21 +9,56 @@ function App() {
 
   function addToCart(item) {
     const itemExists = cart.findIndex((guitar) => guitar.id === item.id);
+
     if (itemExists >= 0) {
       const updatedCart = [...cart];
       updatedCart[itemExists].quantity++;
       setCart(updatedCart);
-      console.log("ya existe");
     } else {
-      console.log("no existe, agregando");
       item.quantity = 1;
       setCart([...cart, item]);
     }
   }
 
+  function removeFromCart(id) {
+    setCart((prevCart) => prevCart.filter((guitar) => guitar.id !== id));
+  }
+
+  function increaseQuantity(id){
+    const updatedCart = cart.map(item => {
+      if(item.id === id){
+        return {
+          ...item,
+          quantity: item.quantity+1
+        }
+      }
+      return item
+
+    })
+    setCart(updatedCart)
+  }
+  function decreaseQuantity(id){
+    const updatedCart = cart.map(item => {
+      if(item.id === id && item.quantity > 1){
+        return {
+          ...item,
+          quantity: item.quantity-1
+        }
+      }
+      return item
+
+    })
+    setCart(updatedCart)
+  }
+
   return (
     <>
-      <Header />
+      <Header 
+      cart={cart} 
+      removeFromCart={removeFromCart}
+      increaseQuantity={increaseQuantity} 
+      decreaseQuantity={decreaseQuantity}
+      />
 
       <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
